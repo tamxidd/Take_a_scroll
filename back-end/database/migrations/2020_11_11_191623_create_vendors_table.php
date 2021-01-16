@@ -19,6 +19,7 @@ class CreateVendorsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->mediumText('description');
+            $table->string('banner');
             $table->string('type');
             $table->double('vendor_rating');
             $table->string('vendor_review');
