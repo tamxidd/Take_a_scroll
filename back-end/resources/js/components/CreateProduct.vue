@@ -94,21 +94,16 @@
                         class="form-control"
                         id="brandname"
                         v-model="p_brand"
-                        placeholder="put product stock"
+                        placeholder="put product brand"
                     />
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Product Description</label>
-                <textarea
-                    placeholder="Put Product Descrption Here.."
-                    class="form-control"
-                    v-model="p_description"
-                    rows="3"
-                ></textarea>
+                 <vue-editor   v-model="p_description" />
             </div>
-            <button type="submt" class="btn btn-primary">Next</button>
+            <button type="submit" class="btn btn-primary">Next</button>
         </form>
         <!-- product add info end -->
         <!-- image uploader started -->
@@ -141,17 +136,27 @@
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import { VueEditor } from "vue2-editor";
 export default {
+
     components: {
-        vueDropzone: vue2Dropzone
+        vueDropzone: vue2Dropzone,
+          components: { VueEditor },
+    },
+    props:{
+        store:{
+            type:Object,
+            default:null
+        }
     },
     created() {
         this.fetch_categories();
+        this.store_id=this.store.id;
     },
     data: function() {
         return {
             // we will pass the pruduct id  in the url collected from the server response after the product creation and the add image as update value
-
+            store_id:'',
             p_name: "",
             p_brand: "",
             p_price: 0.0,
@@ -173,7 +178,8 @@ export default {
                 ulpoadMultiple: true,
                 parallelUploads: 5,
                 params: {
-                    product_id: ""
+                    product_id: "",
+                    store_id:"",
                 },
                 headers: {
                     "X-CSRF-TOKEN": document.head.querySelector(
@@ -193,6 +199,7 @@ export default {
         upload_image() {
             this.$refs.myVueDropzone.processQueue();
             this.$refs.myVueDropzone.processingmultiple();
+
         },
 
         fetch_categories() {
@@ -219,7 +226,7 @@ export default {
         },
         go_Back(){
         // console.log("im am hit");
-         location.replace("/dashboard");
+         location.replace("/vendor-dashboard");
 
     },
         addProduct() {
@@ -233,17 +240,27 @@ export default {
             formData.append("warrenty", this.p_warrenty);
             formData.append("stock", this.p_stock);
             formData.append("descrption", this.p_description);
+            if(this.p_category_id === "" || this.p_sub_category === "" || this.p_name==="" || this.p_brand ==="" ||  this.p_warrenty === "" || this.p_price === 0 || this.p_warrenty === "" ||  this.p_description === ""){
 
-            axios
-                .post("/create-product", formData)
+                        this.$alert(
+                        res.data.message,
+                        "",
+                        "Fill all The Form Fields "
+                        );
+            }else{
+                axios
+                .post(`/stores/${this.store_id}/products`, formData)
                 .then(res => {
-                    // console.log(res.data.product.id);
+                    console.log(res);
                     this.product_id = res.data.product.id;
                     this.dropzoneOptions.params.product_id = this.product_id;
+                    this.dropzoneOptions.params.store_id=this.store_id;
                 })
                 .catch(err => {
                     console.log(err);
                 });
+            }
+
         }
     },
 

@@ -27,6 +27,9 @@ files.keys().map(key =>
     )
 );
 import VueChatScroll from "vue-chat-scroll";
+import VueSimpleAlert from "vue-simple-alert";
+
+Vue.use(VueSimpleAlert);
 Vue.use(VueChatScroll);
 Vue.component(
     "example-component",

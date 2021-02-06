@@ -4,7 +4,7 @@
     <div class="container">
 
 
-        <create-product></create-product>
+        <create-product :store="{{ $store }}"></create-product>
           <!-- Content Row -->
     </div>
 @endsection

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+// use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -26,7 +28,32 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::DASHBOARD;
+
+    // protected $redirectTo = RouteServiceProvider::VDASHBOARD;
+
+
+
+    // protected function authenticated(Request $request, $user)
+    //     {
+    //     if ( $user->type==='vendor' ) {// do your magic here
+    //         return redirect()->route('dashboard');
+    //     }
+
+    //     return redirect('/home');
+    //     }
+
+
+    public function redirectTo() {
+        $user = Auth::user();
+        switch(true) {
+            case $user->type=='vendor':
+                return '/vendor-dashboard';
+            case $user->type=='customer':
+                return '/';
+            default:
+                return '/';
+        }
+    }
 
     /**
      * Create a new controller instance.

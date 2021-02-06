@@ -101,12 +101,7 @@
 
             <div class="form-group">
                 <label>Product Description</label>
-                <textarea
-                    placeholder="Put Product Descrption Here.."
-                    class="form-control"
-                    v-model="p_description"
-                    rows="3"
-                ></textarea>
+                  <vue-editor   v-model="p_description" />
             </div>
                     <!-- for image -->
 
@@ -158,9 +153,11 @@
 <script>
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import { VueEditor } from "vue2-editor";
 export default {
  components: {
-        vueDropzone: vue2Dropzone
+        vueDropzone: vue2Dropzone,
+        components: { VueEditor },
     },
 props:{
  product:{

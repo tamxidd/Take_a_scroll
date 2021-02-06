@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Store;
 use App\Product;
 use App\Category;
 use App\SubCategory;
@@ -15,14 +16,20 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Store $store)
     {
+
         // $pictures=Product::findOrFail($id);
-        $products=Product::where('vendor_id',auth()->user()->id)->paginate(5);
-        // dd($products);
 
-        return view('product.showProducts',compact('products'));
+        if (auth()->user()){
+            $products=Product::where('store_id',$store->id)->paginate(5);
+            // dd($products);
 
+            return view('product.showProducts',compact('products'));
+        }
+       else{
+           return back();
+       }
     }
 
     /**
@@ -30,9 +37,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Store $store)
     {
-        return view('product.createProduct');
+        // dd($store);
+
+        return view('product.createProduct',compact('store'));
     }
 
     /**
@@ -41,7 +50,7 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Store $store, Request $request)
     {
 
 
@@ -60,7 +69,29 @@ class ProductController extends Controller
             'brand_name'=>$request->brand,
             'product_tags'=>"none",
             'product_pictures'=>[],
-            'vendor_id'=>auth()->user()->id
+            'store_id'=>$store->id,
+        ]);
+
+        return response(['product'=>$product]);
+    }
+
+    public function store_cars(Store $store, Request $request){
+        $sub_category=SubCategory::where('name',$request->sub_cat_name)->get('id')->first();
+        $sub_category_id=$sub_category->id;
+        $product=Product::create([
+            'name'=>$request->name,
+            'price'=>$request->price,
+            'slug'=>$request->name.'-'.'vendor'.auth()->user()->id,
+            'product_decription'=>$request->descrption,
+            'category_id'=>$request->category_id,
+            'product_warranty'=>$request->used,
+            'product_stock'=>$request->stock,
+            'sub_category_id'=>$sub_category_id,
+            'product_rating'=>0,
+            'brand_name'=>$request->brand,
+            'product_tags'=>"none",
+            'product_pictures'=>[],
+            'store_id'=>$store->id,
         ]);
 
         return response(['product'=>$product]);
@@ -138,11 +169,11 @@ class ProductController extends Controller
     }
 
     public function store_product_image(Request $request ){
-
+        // dd($request);
         $product=Product::findOrFail($request->product_id);
          //image upload in the file system section
          $imageName = time().'.'.$request->file->getClientOriginalExtension();
-         $request->file->move(public_path('images/'.str_replace(' ', '',auth()->user()->name).'/products/'.$request->product_id), $imageName);
+         $request->file->move(public_path('images/'.str_replace(' ', '',auth()->user()->name).'/'.$request->store_id.'/products/'.$request->product_id), $imageName);
 
 
          $images=array();
@@ -150,7 +181,7 @@ class ProductController extends Controller
        if ($product->product_pictures ===[]){
 
 
-        array_push($images,'images/'.str_replace(' ', '',auth()->user()->name).'/products/'.$request->product_id.'/'.$imageName);
+        array_push($images,'images/'.str_replace(' ', '',auth()->user()->name).'/'.$request->store_id.'/products/'.$request->product_id.'/'.$imageName);
 
             $product->update([
                 'product_pictures' =>$images,
@@ -163,7 +194,7 @@ class ProductController extends Controller
 
         $images=array_merge($images,$product->product_pictures);
 
-        array_push($images,'images/'.str_replace(' ', '',auth()->user()->name).'/products/'.$request->product_id.'/'.$imageName);
+        array_push($images,'images/'.str_replace(' ', '',auth()->user()->name).'/'.$request->store_id.'/products/'.$request->product_id.'/'.$imageName);
            $product->update([
             'product_pictures' =>$images,
          ]);
@@ -171,11 +202,15 @@ class ProductController extends Controller
        else{
 
         array_push($images,$product->product_pictures);
-        array_push($images,'images/'.str_replace(' ', '',auth()->user()->name).'/products/'.$request->product_id.'/'.$imageName);
+        array_push($images,'images/'.str_replace(' ', '',auth()->user()->name).'/'.$request->store_id.'/products/'.$request->product_id.'/'.$imageName);
         $product->update([
          'product_pictures' => $images,
       ]);
        }
         return response(['pic'=>$product->product_pictures]);
+    }
+
+    public function car_create(Store $store){
+        return view('product.cars.createCar',compact('store'));
     }
 }

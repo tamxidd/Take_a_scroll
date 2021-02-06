@@ -29,7 +29,19 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::DASHBOARD;
+    // protected $redirectTo = R outeServiceProvider::DASHBOARD;
+
+    public function redirectTo() {
+        $user = Auth::user();
+        switch(true) {
+            case $user->type=='vendor':
+                return '/vendor-dashboard';
+            case $user->type=='customer':
+                return '/';
+            default:
+                return '/';
+        }
+    }
 
     /**
      * Create a new controller instance.
