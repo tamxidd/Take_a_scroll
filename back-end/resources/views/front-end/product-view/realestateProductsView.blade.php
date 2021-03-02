@@ -10,12 +10,7 @@
             </div>
         @endif
 
-        <div class="banner">
-            <img class="img-fluid" style="height: 40vh;width:100%;" src="{{ asset('/'.$store->banner) }}" alt="">
-        </div>
-        <h1 class="text m-4 text-center"><strong>{{ $store->name }}</strong></h1>
-        <hr>
-        <br>
+
         <div class="row">
 
             <div class="col-12">
@@ -71,10 +66,8 @@
                 <!-- Shop Product Wrap Start -->
                 <div class="shop-product-wrap grid row">
 
-                    {{-- for reaal estae --}}
-                    @if($store->type==="realestate")
                     <div class="row">
-                        @forelse ($store->realestates as $product)
+                        @forelse ($products as $product)
 
                             <!-- Product Start -->
                         <div class="ee-product col-xl-3 col-lg-4 col-md-6 col-12 pb-30 pt-10 ">
@@ -88,14 +81,8 @@
                                     <a href="#" data-tooltip="Compare"><i class="ti-control-shuffle"></i></a>
                                     <a href="#" data-tooltip="Wishlist"><i class="ti-heart"></i></a>
                                 </div> --}}
-                                 @if($store->type==="realestate")
 
-                                    {{-- <a href="{{ route('cart.add.realestate',$product->id) }}" data-para2="{{$product->id}}" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a> --}}
-                                @else
-                                    <a href="{{ route('cart.add',$product->id) }}" data-para2="{{$product->id}}" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a>
-                                @endif
-
-
+                                {{-- <a href="{{ route('cart.add',$product->id) }}" data-para2="{{$product->id}}" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a> --}}
 
                             </div>
 
@@ -105,11 +92,26 @@
                                 <!-- Category & Title -->
                                 <div class="category-title">
 
-                                    <a href="{{ route('category.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'product'=>$product->id]) }}" class="cat"></a>
-                                    <h5 class="title"><a href="{{ route('category.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'product'=>$product->id]) }}">{{ $product->name }}</a></h5>
+                                    <a  href="{{ route('category.realestate.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'realestate'=>$product->id]) }}"  class="cat"><h4>{{ $sub_cat_name }}</h4></a>
+
+
+
+
+                                    <h5 class="title"><a  href="{{ route('category.realestate.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'realestate'=>$product->id]) }}" >{{ $product->name }}</a></h5>
 
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-3 ">
+                                        <i class="fa fa-bed" aria-hidden="true"></i><span class="p-2">{{ $product->bed }}</span>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <i class="fa fa-bath" aria-hidden="true"></i><span class="p-2">{{ $product->bath }}</span>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <i  class="fa fa-table" aria-hidden="true"></i><span class="p-2">{{ $product->space_area }}sqft</span>
+                                    </div>
 
+                                </div>
                                 <!-- Price & Ratting -->
                                 <div class="price-ratting">
 
@@ -210,141 +212,6 @@
                         </div><!-- Product List End -->
 
                     </div>
-                    @else
-                    <div class="row">
-                        @forelse ($store->products as $product)
-
-                            <!-- Product Start -->
-                        <div class="ee-product col-xl-3 col-lg-4 col-md-6 col-12 pb-30 pt-10 ">
-
-                            <!-- Image -->
-                            <div class="image">
-
-                                <a href="{{ route('category.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'product'=>$product->id]) }}" class="img"><img src="{{ asset($product->product_pictures[0]) }}" alt="Product Image"></a>
-
-                                {{-- <div class="wishlist-compare">
-                                    <a href="#" data-tooltip="Compare"><i class="ti-control-shuffle"></i></a>
-                                    <a href="#" data-tooltip="Wishlist"><i class="ti-heart"></i></a>
-                                </div> --}}
-
-                                <a href="{{ route('cart.add',$product->id) }}" data-para2="{{$product->id}}" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a>
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="content">
-
-                                <!-- Category & Title -->
-                                <div class="category-title">
-
-                                    <a href="{{ route('category.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'product'=>$product->id]) }}" class="cat"></a>
-                                    <h5 class="title"><a href="{{ route('category.products.show',['category'=>$product->category->id,'sub_cat_name'=>$product->subCategory->name,'sub_cat'=>$product->subCategory->id,'product'=>$product->id]) }}">{{ $product->name }}</a></h5>
-
-                                </div>
-
-                                <!-- Price & Ratting -->
-                                <div class="price-ratting">
-
-                                    <h5 class="price">৳{{ $product->price }}</h5>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <!-- Product End -->
-
-                        @empty
-                            <h1 class="text text-danger">NO Products ..!!</h1>
-                        @endforelse
-
-
-
-
-
-
-
-
-
-                        <!-- Product List Start -->
-                        <div class="ee-product-list">
-
-                            <!-- Image -->
-                            <div class="image">
-
-                                <a href="single-product.html" class="img"><img src="assets/images/product/product-1.png" alt="Product Image"></a>
-
-                            </div>
-
-                            <!-- Content -->
-                            <div class="content">
-
-                                <!-- Category & Title -->
-                                <div class="head-content">
-
-                                    <div class="category-title">
-                                        <a href="#" class="cat">Laptop</a>
-                                        <h5 class="title"><a href="single-product.html">Zeon Zen 4 Pro</a></h5>
-                                    </div>
-
-                                    <h5 class="price">৳295.00</h5>
-
-                                </div>
-
-                                <div class="left-content">
-
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-
-                                    <div class="desc">
-                                        <p>enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni res eos qui ratione voluptatem sequi nesciunt</p>
-                                    </div>
-
-                                    <div class="actions">
-
-                                        <a href="#" class="add-to-cart"><i class="ti-shopping-cart"></i><span>ADD TO CART</span></a>
-
-                                        <div class="wishlist-compare">
-                                            <a href="#" data-tooltip="Compare"><i class="ti-control-shuffle"></i></a>
-                                            <a href="#" data-tooltip="Wishlist"><i class="ti-heart"></i></a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="right-content">
-                                    <div class="specification">
-                                        <h5>Specifications</h5>
-                                        <ul>
-                                            <li>Intel Core i7 Processor</li>
-                                            <li>Zeon Z 170 Pro Motherboad</li>
-                                            <li>16 GB RAM</li>
-                                        </ul>
-                                    </div>
-                                    <span class="availability">Availability: <span>In Stock</span></span>
-                                </div>
-
-                            </div>
-
-                        </div><!-- Product List End -->
-
-                    </div>
-
-                    @endif
-
 
 
                 </div><!-- Shop Product Wrap End -->

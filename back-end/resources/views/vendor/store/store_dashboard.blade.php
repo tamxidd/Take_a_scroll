@@ -14,7 +14,7 @@
             @elseif($store->type === "cars")
                  <a href="{{ route('cars.product.create',$store->id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Create A Product</a>
             @else
-                 <a href="{{ route('product.create',$store->id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Create A Product</a>
+                 <a href="{{ route('product.realestate.create',$store->id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Create A Product</a>
             @endif
           </div>
 

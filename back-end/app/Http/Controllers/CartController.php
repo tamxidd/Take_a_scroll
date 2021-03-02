@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Cart;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class CartController extends Controller
 {
@@ -105,7 +107,9 @@ class CartController extends Controller
     $cartItem->associate('App\Product');
 
     // $cart=Cart::content();
-    Cart::store(auth()->user()->id);
+    $indentity=auth()->user()->name.auth()->user()->id;
+
+    Cart::store( $indentity);
 
     return response(['message' => "product added to the cart"]);
     }
@@ -113,5 +117,20 @@ class CartController extends Controller
     public function remove_item($id){
         Cart::remove($id);
         return response(['message' => "Product removed from the cart"]);
+    }
+
+    public function checkout(){
+        $indentity=auth()->user()->name.auth()->user()->id;
+        $cart=Cart::stored_data($indentity);
+        $cart=Cart::content();
+
+        dd($cart);
+    }
+
+    public function update_cart($item,$qty){
+            // dd($item,$qty);
+        Cart::update($item, $qty);
+        // dd(Cart::content());
+        return response(['message'=>'Product Quantity Updated']);
     }
 }

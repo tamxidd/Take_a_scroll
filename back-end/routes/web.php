@@ -55,6 +55,12 @@ Route::middleware(['verified','vendor'])->group( function () {
     // car products
     Route::get('stores/{store}/product/create-car','ProductController@car_create')->name('cars.product.create');
 
+    //realestate products
+
+    Route::get('stores/{store}/realestate-product/create','ProductController@create_realestate_products')->name('product.realestate.create');
+    Route::post('stores/{store}/realestate-product/store','ProductController@store_realestate_products')->name('product.realestate.store');
+
+
 });
 
 // customer routes
@@ -63,8 +69,15 @@ Route::middleware(['verified','customer'])->group( function () {
     //cart
     Route::get('/cart','CartController@index')->name('cart.index');
     Route::get('/cart/products/{product}/add','CartController@add_to_cart')->name('cart.add');
+    Route::get('/cart/realestates/{realestate}/add','CartController@add_to_cart_realestate')->name('cart.add.realestate');
+
     Route::get('/cart/remove/product/{id}','CartController@remove_item')->name('cart.remove');
     Route::get('/cart-restore','CartController@restore');
+    Route::get('/cart-checkout','CartController@checkout')->name('cart.checkout');
+    Route::get('/cart/{item}/update/{qty}','CartController@update_cart');
+
+
+
 
 });
 
@@ -95,6 +108,7 @@ Route::get('/test/{id}','ProductController@index');
 
 Route::get('categories/{category}/{sub_cat_name}/{sub_cat}','SubCategoryController@index')->name('category.products.index');
 Route::get('categories/{category}/{sub_cat_name}/{sub_cat}/products/{product}','SubCategoryController@show')->name('category.products.show');
+Route::get('categories/{category}/{sub_cat_name}/{sub_cat}/realestates/{realestate}','SubCategoryController@show_realestate')->name('category.realestate.products.show');
 
 
 Route::get('/logout', function () {
@@ -113,7 +127,8 @@ View::composer(['*'], function ($view) {
     $electronics_shops=Store::where('type','electronics')->get();
     $realestate_shops=Store::where('type','realestate')->get();
     $cars_shops=Store::where('type','cars')->get();
+    $category_type=['Electronics','Cars','Realestate'];
     // $shops=array(['Electronics'=>$electronics_shops,'Realestate'=>$realestate_shops,'Cars'=>$cars_shops]);
 // dd($shops);
-    $view->with(['categories'=>$categories,'cart'=>$cart,'Electronics'=>$electronics_shops,'Realestate'=>$realestate_shops,'Cars'=>$cars_shops]);
+    $view->with(['categories'=>$categories,'cart'=>$cart,'Electronics'=>$electronics_shops,'Realestate'=>$realestate_shops,'Cars'=>$cars_shops,'category_type']);
 });

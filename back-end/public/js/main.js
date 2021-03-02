@@ -752,6 +752,16 @@
         total = price_unit * counter;
 
         document.getElementById(id).value = total;
+        //send cart update request
+        $.ajax({
+            method: "GET",
+            url: `/cart/${i}/update/${counter}`
+            // data: { name: "John", location: "Boston" }
+        }).done(function(res) {
+            // location.reload();
+            alert(res.data.message);
+        });
+
         // console.log(id);
     });
 
@@ -768,6 +778,15 @@
         total = price_unit * counter;
 
         document.getElementById(id).value = total;
+        //send cart update request
+        $.ajax({
+            method: "GET",
+            url: `/cart/${i}/update/${counter}`
+            // data: { name: "John", location: "Boston" }
+        }).done(function(res) {
+            // location.reload();
+            alert(res.data.message);
+        });
         // console.log(total, counter);
     });
 

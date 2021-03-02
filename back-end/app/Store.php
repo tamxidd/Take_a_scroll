@@ -26,4 +26,8 @@ class Store extends Model
 
         return $this->hasMany(Product::class,'store_id','id');
     }
+    public function realestates(){
+
+        return $this->hasMany(Realestate::class,'store_id','id');
+    }
 }

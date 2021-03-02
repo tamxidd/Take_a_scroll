@@ -30,6 +30,7 @@ class StoreController extends Controller
         return view('vendor.store.create_store');
     }
 
+
     /**
      * Store a newly created resource in storage.
      *

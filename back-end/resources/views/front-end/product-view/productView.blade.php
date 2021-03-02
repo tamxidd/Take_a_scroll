@@ -18,23 +18,43 @@
                 <div class="single-product-image thumb-right">
 
                     <div class="tab-content">
-                        {{-- product images --}}
-                       @forelse($product->product_pictures as $key => $value)
+                       @if($product->category->categoryType=='realestate')
+                             {{-- product images --}}
+                            @forelse($product->images as $key => $value)
                             <div id="single-image-{{ $key}}" class="tab-pane fade show active big-image-slider">
                                 <div class="big-image"><img src="{{ asset($value) }}" alt="Big Image"><a href="{{ asset($value) }}"  class="big-image-popup"><i class="fa fa-search-plus"></i></a></div>
                             </div>
-                       @empty
-                           <h1 class="text text-danger">No Images Found ...!!1</h1>
-                       @endforelse
+                                @empty
+                                    <h1 class="text text-danger">No Images Found ...!!1</h1>
+                                @endforelse
+                       @else
+                             {{-- product images --}}
+                        @forelse($product->product_pictures as $key => $value)
+                        <div id="single-image-{{ $key}}" class="tab-pane fade show active big-image-slider">
+                            <div class="big-image"><img src="{{ asset($value) }}" alt="Big Image"><a href="{{ asset($value) }}"  class="big-image-popup"><i class="fa fa-search-plus"></i></a></div>
+                        </div>
+                            @empty
+                                <h1 class="text text-danger">No Images Found ...!!1</h1>
+                            @endforelse
+                       @endif
 
                     </div>
                     {{-- thumb nails --}}
                     <div class="thumb-image-slider nav" data-vertical="true">
+                    @if($product->category->categoryType=='realestate')
+
+                        @forelse($product->images as $key => $value)
+                        <a class="thumb-image active" data-toggle="tab" href="#single-image-{{ $key}}"><img src="{{ asset($value) }}" alt="Thumbnail Image"></a>
+                        @empty
+                        @endforelse
+                    @else
                         @forelse($product->product_pictures as $key => $value)
-                            <a class="thumb-image active" data-toggle="tab" href="#single-image-{{ $key}}"><img src="{{ asset($value) }}" alt="Thumbnail Image"></a>
+                        <a class="thumb-image active" data-toggle="tab" href="#single-image-{{ $key}}"><img src="{{ asset($value) }}" alt="Thumbnail Image"></a>
                         @empty
 
                         @endforelse
+
+                    @endif
 
 
                     </div>
@@ -102,7 +122,11 @@
 
                         <div class="actions">
 
-                            <a href="#" class="add-to-cart"  data-para2="{{$product->id}}"><i class="ti-shopping-cart" ></i><span>ADD TO CART</span></a>
+                           @if($product->category->categoryType=='realestate')
+
+                           @else
+                                 <a href="#" class="add-to-cart"  data-para2="{{$product->id}}"><i class="ti-shopping-cart" ></i><span>ADD TO CART</span></a>
+                           @endif
 
                             <div class="wishlist-compare">
                                 {{-- <a href="#" data-tooltip="Compare"><i class="ti-control-shuffle"></i></a> --}}
@@ -160,9 +184,15 @@
 
                         <div class="row">
                             <div class="single-product-description-content col-lg-8 col-12">
-                               <p>
-                                   {{ $product->product_decription }}
-                               </p>
+                              @if($product->category->categoryType=='realestate')
+                              <h3>Location:</h3>
+                                    <h4> {{ $product->sub_area }} ,{{ $product->area }} ,{{ $product->district }}</h4>
+                                     {{ $product->description }}
+                              @else
+                                <p>
+                                    {{ $product->product_decription }}
+                                </p>
+                              @endif
                             </div>
                             <div class="single-product-description-image col-lg-4 col-12">
                                 <img src="assets/images/single-product/description.png" alt="description">
